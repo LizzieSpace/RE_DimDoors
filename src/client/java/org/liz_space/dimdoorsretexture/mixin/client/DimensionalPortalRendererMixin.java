@@ -2,8 +2,8 @@ package org.liz_space.dimdoorsretexture.mixin.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.util.math.Direction;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.core.Direction;
 import org.dimdev.dimdoors.api.client.DimensionalPortalRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Environment(EnvType.CLIENT)
@@ -20,6 +19,12 @@ public class DimensionalPortalRendererMixin {
     @Unique
     private static Set<Direction> CUBOID_DIRECTIONS;
 
+    /**
+     * Retrieves a set of all possible directions for constructing a cuboid.
+     * Initializes the set if it is not already initialized.
+     *
+     * @return a set of direction constants representing all possible directions
+     */
     @Unique
     private static Set<Direction> getDirections() {
         if (CUBOID_DIRECTIONS == null) { CUBOID_DIRECTIONS = new HashSet<>(Set.of(Direction.values())); }
@@ -33,8 +38,8 @@ public class DimensionalPortalRendererMixin {
      * @return a new instance of ModelPart.Cuboid with specified attributes
      */
     @Unique
-    private static ModelPart.Cuboid createCuboid(float size_y) {
-        return new ModelPart.Cuboid(
+    private static ModelPart.Cube createCuboid(float size_y) {
+        return new ModelPart.Cube(
                 0, 0,
                 .2F, .2F, -.1F,
                 15.8F, size_y, .01F,
@@ -52,7 +57,7 @@ public class DimensionalPortalRendererMixin {
      * @return a new ModelPart.Cuboid
      */
     @ModifyVariable(method = "<clinit>", at = @At("STORE"), ordinal = 0)
-    private static ModelPart.Cuboid injectSmall(ModelPart.Cuboid cuboid) {
+    private static ModelPart.Cube injectSmall(ModelPart.Cube cuboid) {
         return createCuboid(15.8F);
     }
 
@@ -63,7 +68,7 @@ public class DimensionalPortalRendererMixin {
      * @return a new ModelPart.Cuboid
      */
     @ModifyVariable(method = "<clinit>", at = @At("STORE"), ordinal = 1)
-    private static ModelPart.Cuboid injectBig(ModelPart.Cuboid cuboid) {
+    private static ModelPart.Cube injectBig(ModelPart.Cube cuboid) {
         return createCuboid(31.8F);
     }
 }
