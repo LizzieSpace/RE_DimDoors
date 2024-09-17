@@ -18,7 +18,13 @@ import java.util.Set;
 @Mixin(DimensionalPortalRenderer.class)
 public class DimensionalPortalRendererMixin {
     @Unique
-    private static final Set<Direction> CUBOID_DIRECTIONS = new HashSet<>(List.of(Direction.values()));
+    private static Set<Direction> CUBOID_DIRECTIONS;
+
+    @Unique
+    private static Set<Direction> getDirections() {
+        if (CUBOID_DIRECTIONS == null) { CUBOID_DIRECTIONS = new HashSet<>(Set.of(Direction.values())); }
+        return CUBOID_DIRECTIONS;
+    }
 
     /**
      * Creates and returns a new instance of ModelPart.Cuboid with predefined dimensions
@@ -35,7 +41,7 @@ public class DimensionalPortalRendererMixin {
                 .0F, .0F, .0F,
                 false,
                 1024.0F, 1024.0F,
-                CUBOID_DIRECTIONS
+                getDirections()
         );
     }
 
