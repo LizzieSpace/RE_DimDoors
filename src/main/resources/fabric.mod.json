@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "dimdoorsretexture",
+  "version": "${version}",
+  "name": "dimDoorsRetexture",
+  "description": "Just me trying to mess around with how DimDoors renders the warps. as i play wifh fabric, i won't bother portinng this to forge.",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "dimdoorsretexture/pack.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "org.liz_space.dimdoorsretexture.client.DimPortalRetexture"
+    ],
+    "main": [
+      "org.liz_space.dimdoorsretexture.Main"
+    ]
+  },
+  "mixins": [
+    "dimdoorsretexture.mixins.json",
+    {
+      "config": "dimdoorsretexture.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
