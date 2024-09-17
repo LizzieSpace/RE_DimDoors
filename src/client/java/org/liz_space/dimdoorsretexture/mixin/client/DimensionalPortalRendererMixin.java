@@ -34,15 +34,25 @@ public class DimensionalPortalRendererMixin {
     /**
      * Creates and returns a new instance of ModelPart.Cuboid with predefined dimensions
      * and directions.
-     *
+     * <p>
+     * Original Values small:
+     .2F, .2F, -.1F,
+     15.8F, 15.8f, .01F,
+     * <p>
+     * Original Values big:
+     .2F, .2F, -.1F,
+     15.8F, 31.8f, .01F,
      * @return a new instance of ModelPart.Cuboid with specified attributes
      */
     @Unique
-    private static ModelPart.Cube createCuboid(float size_y) {
+    private static ModelPart.Cube createCuboid(
+            float originX, float originY, float originZ,
+            float dimensionX, float dimensionY, float dimensionZ
+    ) {
         return new ModelPart.Cube(
                 0, 0,
-                .2F, .2F, -.1F,
-                15.8F, size_y, .01F,
+                originX, originY, originZ,
+                dimensionX, dimensionY, dimensionZ,
                 .0F, .0F, .0F,
                 false,
                 1024.0F, 1024.0F,
@@ -58,7 +68,10 @@ public class DimensionalPortalRendererMixin {
      */
     @ModifyVariable(method = "<clinit>", at = @At("STORE"), ordinal = 0)
     private static ModelPart.Cube injectSmall(ModelPart.Cube cuboid) {
-        return createCuboid(15.8F);
+        return createCuboid(
+                .2F, .2F, -.1F,
+                15.8F, 15.8f, .01F
+        );
     }
 
     /**
@@ -69,6 +82,9 @@ public class DimensionalPortalRendererMixin {
      */
     @ModifyVariable(method = "<clinit>", at = @At("STORE"), ordinal = 1)
     private static ModelPart.Cube injectBig(ModelPart.Cube cuboid) {
-        return createCuboid(31.8F);
+        return createCuboid(
+                .2F, .2F, -.1F,
+                15.8F, 31.8f, .01F
+        );
     }
 }
