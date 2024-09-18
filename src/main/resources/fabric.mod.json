@@ -13,7 +13,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "org.liz_space.dimdoorsretexture.client.DimPortalRetexture"
+      "org.liz_space.dimdoorsretexture.client.DimPortalRetextureClient"
     ],
     "main": [
       "org.liz_space.dimdoorsretexture.DimDoorsRetextureMain"

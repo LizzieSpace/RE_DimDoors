@@ -1,16 +1,15 @@
 package org.liz_space.dimdoorsretexture.client;
 
-import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
-import org.slf4j.Logger;
 
-public class DimPortalRetexture implements ClientModInitializer {
-    public static final Logger LOGGER = LogUtils.getLogger();
-    public static final String MOD_ID = "dimdoorsretexture";
+import static org.liz_space.dimdoorsretexture.DimDoorsRetextureMain.LOGGER;
+import static org.liz_space.dimdoorsretexture.DimDoorsRetextureMain.MOD_ID;
+
+public class DimPortalRetextureClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
