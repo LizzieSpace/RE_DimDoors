@@ -17,12 +17,10 @@ public class DimPortalRetextureClient implements ClientModInitializer {
 
 //        public static final ResourceLocation id = new ResourceLocation("dimdoors");
 
-        FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(modContainer -> {
-            ResourceManagerHelper.registerBuiltinResourcePack(
-                    new ResourceLocation(MOD_ID, "default"),
-                    modContainer,
-                    ResourcePackActivationType.DEFAULT_ENABLED
-            );
-        });
+        FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(modContainer -> ResourceManagerHelper.registerBuiltinResourcePack(
+                new ResourceLocation(MOD_ID, "default"),
+                modContainer,
+                ResourcePackActivationType.DEFAULT_ENABLED
+        ));
     }
 }
