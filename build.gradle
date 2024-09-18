@@ -62,11 +62,16 @@ repositories {
         name = 'ParchmentMC'
         url = 'https://maven.parchmentmc.org'
     }
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
     maven { url = "https://maven.shedaniel.me/" } // Cloth Config
     maven { url = "https://maven.architectury.dev/" } // Architectury API
     maven { url = "https://jitpack.io" } // poly2tri
     maven { url = "https://api.modrinth.com/maven" } // LazyDFU
-    maven { url = "https://maven.terraformersmc.com/" } // Mod Menu
+    maven { url = "https://maven.terraformersmc.com/" } // Mod Menu, EMI
 
 
 }
@@ -85,8 +90,10 @@ def includeCompile(DependencyHandler deps, entry) {
 }
 
 def devEnv(DependencyHandler deps) {
-    deps.modLocalRuntime("maven.modrinth:lazydfu:$lazy_dfu_version")
-    deps.modLocalRuntime("com.terraformersmc:modmenu:$modmenu_version")
+    deps.modLocalRuntime "maven.modrinth:lazydfu:${lazy_dfu_version}"
+    deps.modLocalRuntime "com.terraformersmc:modmenu:${modmenu_version}"
+    deps.modLocalRuntime "dev.emi:emi-fabric:${emi_version}+${minecraft_version}"
+    deps.modLocalRuntime "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
 }
 
 def setup(DependencyHandler deps) {
