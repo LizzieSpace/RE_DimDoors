@@ -4,6 +4,7 @@
   "package": "org.liz_space.dimdoorsretexture.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "DetachedRiftBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
