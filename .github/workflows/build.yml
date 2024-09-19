@@ -15,7 +15,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: get mod and game versions
-        run: grep -E "(minecraft_version)|(mod_version=)|(archives_base_name=)" ${{GITHUB_WORKSPACE}}/gradle.properties >> {{$GITHUB_ENV}}
+        run: grep -E "(minecraft_version)|(mod_version=)|(archives_base_name=)" $GITHUB_WORKSPACE/gradle.properties >> {{$GITHUB_ENV}}
       - name: print versions
         run: |
           echo Minecraft version: ${{env.minecraft_version}}
