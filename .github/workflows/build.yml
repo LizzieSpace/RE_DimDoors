@@ -17,7 +17,7 @@ jobs:
       - name: get mod and game versions
         run: |
           ls -A
-          grep -E "(minecraft_version)|(mod_version=)|(archives_base_name=)" $GITHUB_WORKSPACE/gradle.properties >> {{$GITHUB_ENV}}
+          grep -E "(minecraft_version)|(mod_version=)|(archives_base_name=)" gradle.properties >> "$GITHUB_ENV"
       - name: print versions
         run: |
           echo Minecraft version: ${{env.minecraft_version}}
