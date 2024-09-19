@@ -1,4 +1,4 @@
-package org.liz_space.dimdoorsretexture.mixin;
+package org.liz_space.re_dimdoors.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;

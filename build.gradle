@@ -14,7 +14,7 @@ loom {
     splitEnvironmentSourceSets()
 
     mods {
-        "dimdoorsretexture" {
+        "re_dimdoors" {
             sourceSet sourceSets.main
             sourceSet sourceSets.client
         }
@@ -72,8 +72,6 @@ repositories {
     maven { url = "https://jitpack.io" } // poly2tri
     maven { url = "https://api.modrinth.com/maven" } // LazyDFU
     maven { url = "https://maven.terraformersmc.com/" } // Mod Menu, EMI
-
-
 }
 
 configurations.configureEach {
@@ -97,7 +95,6 @@ def devEnv(DependencyHandler deps) {
 }
 
 def setup(DependencyHandler deps) {
-    // To change the versions see the gradle.properties file
     deps.minecraft "com.mojang:minecraft:${project.minecraft_version}"
     deps.mappings loom.layered() {
         officialMojangMappings()
@@ -107,7 +104,6 @@ def setup(DependencyHandler deps) {
 }
 
 def required(DependencyHandler deps) {
-    // Fabric API. This is technically optional, but you probably want it anyway.
     deps.modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     deps.modImplementation "maven.modrinth:dimensionaldoors:${rootProject.dimdoors_version}-fabric"
 
@@ -117,7 +113,6 @@ def required(DependencyHandler deps) {
     includeCompile(deps, "com.flowpowered:flow-math:1.0.3")
     includeCompile(deps, "org.jgrapht:jgrapht-core:1.1.0")
     includeCompile(deps, "com.github.DimensionalDevelopment:poly2tri.java:0.1.1")
-
 }
 
 dependencies {

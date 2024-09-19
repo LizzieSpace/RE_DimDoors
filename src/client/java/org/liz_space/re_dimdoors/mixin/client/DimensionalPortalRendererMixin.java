@@ -1,4 +1,4 @@
-package org.liz_space.dimdoorsretexture.mixin.client;
+package org.liz_space.re_dimdoors.mixin.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

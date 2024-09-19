@@ -1,12 +1,14 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.liz_space.dimdoorsretexture.mixin.client",
+  "package": "org.liz_space.re_dimdoors.mixin",
   "compatibilityLevel": "JAVA_17",
-  "client": [
-    "DimensionalPortalRendererMixin"
+  "mixins": [
+    "DetachedRiftBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+  ]
 }

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "dimdoorsretexture",
+  "id": "re_dimdoors",
   "version": "${version}",
-  "name": "dimDoorsRetexture",
+  "name": "re_dimdoors",
   "description": "Just me trying to mess around with how DimDoors renders the warps. as i play wifh fabric, i won't bother portinng this to forge.",
   "authors": [
     "liz c."
@@ -13,16 +13,16 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "org.liz_space.dimdoorsretexture.client.DimPortalRetextureClient"
+      "org.liz_space.re_dimdoors.client.RE_DimDoorsClient"
     ],
     "main": [
-      "org.liz_space.dimdoorsretexture.DimDoorsRetextureMain"
+      "org.liz_space.re_dimdoors.RE_DimDoorsMain"
     ]
   },
   "mixins": [
-    "dimdoorsretexture.mixins.json",
+    "re_dimdoors.mixins.json",
     {
-      "config": "dimdoorsretexture.client.mixins.json",
+      "config": "re_dimdoors.client.mixins.json",
       "environment": "client"
     }
   ],
