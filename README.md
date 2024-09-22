@@ -7,15 +7,32 @@
 mod. This project focuses on improving resource texture management and extending features through custom mixins. In
 simple terms: it's just a retexture and mild tampering.
 
+
 ## Features
 
 - **Resource Pack**:
   - Switched the warp texture in favor of end portal texture.
 - **Custom Mixin**:
-  - Added `DetachedRiftBlockEntityMixin` to control decay spread (it's now radial).
+- Added `DetachedRiftBlockEntityMixin` to control decay spread (it's now radial).
 
 ## Getting Started
 
+Just pop the newest release on your `mods` folder along with dimdoors and ya should be good!
+
+### Early access previews
+
+check out the newest [Builds](https://github.com/LizzieSpace/RE_DimDoors/actions/workflows/build.yml)!
+On the artifacts section, you will find the built jar file you can use.
+Just download it, unzip it and test it out!
+
+> [!CAUTION]  
+> Previews are under development and possibly unstable...  
+> So be a good bean and backup your world lest things get funky!
+---
+
+## Contributing
+
+We welcome contributions! Please fork the repository and create a pull request for review.
 ### Prerequisites
 
 - Java 17 or later
@@ -48,10 +65,6 @@ mkdir -p run/mods
 mv dimdoors-5.4.1-fabric.jar run/mods/
 ./gradlew runClient
 ```
-
-## Contributing
-
-We welcome contributions! Please fork the repository and create a pull request for review.
 
 ## License
 

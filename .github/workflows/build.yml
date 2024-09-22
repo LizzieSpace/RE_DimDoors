@@ -28,10 +28,12 @@ jobs:
           Mod version: ${{env.mod_version}}  
           Archive base name: ${{env.archives_base_name}}  
           " >> $GITHUB_STEP_SUMMARY
+      - name: remame output file as build preview
+        run: cp -T build/libs/${{env.archives_base_name}}-${{env.mod_version}}.jar ${{env.archives_base_name}}-${{env.mod_version}}-build.${{github.run_number}}.jar
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: '${{env.archives_base_name}}-${{env.mod_version}}-build.${{github.run_number}}.jar'
-          path: 'build/libs/${{env.archives_base_name}}-${{env.mod_version}}.jar'
+          name: ${{env.archives_base_name}}-${{env.mod_version}}-build.${{github.run_number}}
+          path: ${{env.archives_base_name}}-${{env.mod_version}}-build.${{github.run_number}}.jar
           if-no-files-found: 'error'
           overwrite: 'true'
