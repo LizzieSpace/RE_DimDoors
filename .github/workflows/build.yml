@@ -1,5 +1,5 @@
 name: Build
-run-name: Building repository through Gradle
+run-name: Building repository
 on: [ push, workflow_call ]
 jobs:
   build:
@@ -18,10 +18,20 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build
-      - name: get mod and game versions
-        run: grep -E "(minecraft_version)|(mod_version=)|(archives_base_name=)" gradle.properties >> "$GITHUB_ENV"
-      - name: print versions
+      - name: setup env variables
         run: |
-          echo Minecraft version: ${{env.minecraft_version}}
-          echo Mod version: ${{env.mod_version}}
-          echo Archive base name: ${{env.archives_base_name}}
+          grep -E "(minecraft_version)|(mod_version=)|(archives_base_name=)" gradle.properties >> "$GITHUB_ENV"
+      - name: check env variables
+        run: |
+          echo "
+          Minecraft version: ${{env.minecraft_version}}  
+          Mod version: ${{env.mod_version}}  
+          Archive base name: ${{env.archives_base_name}}  
+          " >> $GITHUB_STEP_SUMMARY
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: '${{env.archives_base_name}}-${{env.mod_version}}-build.${{github.run_number}}.jar'
+          path: 'build/libs/${{env.archives_base_name}}-${{env.mod_version}}.jar'
+          if-no-files-found: 'error'
+          overwrite: 'true'
