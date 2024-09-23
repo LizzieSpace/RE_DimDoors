@@ -7,7 +7,7 @@ version = project.mod_version
 group = project.maven_group
 
 base {
-    archivesName = project.archives_base_name
+    archivesName = project.archive_base_name
 }
 
 loom {
@@ -30,13 +30,6 @@ loom {
             runDir "run/server"
         }
 
-        gametestServer {
-            server()
-            name "Headlesss GameTests"
-            vmArg "-Dfabric-api.gametest"
-            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
-            runDir "run/gametest"
-        }
     }
 
 }
@@ -104,7 +97,7 @@ def setup(DependencyHandler deps) {
 }
 
 def required(DependencyHandler deps) {
-    deps.modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    deps.modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}+${project.minecraft_version}"
     deps.modImplementation "maven.modrinth:dimensionaldoors:${rootProject.dimdoors_version}-fabric"
 
     deps.modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
@@ -169,7 +162,7 @@ jar {
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
+            artifactId = project.archive_base_name
             from components.java
         }
     }

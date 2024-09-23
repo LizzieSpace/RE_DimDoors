@@ -27,22 +27,24 @@ jobs:
       - name: setup env variables
         id: var_setup
         run: |
-          grep -E "(fabric_version=)|(minecraft_version=)|(mod_version=)|(archives_base_name=)" gradle.properties >> "$GITHUB_OUTPUT"
+          grep -E "(fabric_version=)|(minecraft_version=)|(mod_version=)|(archive_base_name=)" gradle.properties >> "$GITHUB_OUTPUT"
       - name: check env variables
         run: |
           echo "
-          fabric_version: ${{steps.var_setup.outputs.fabric_version}}
-          Minecraft version: ${{steps.var_setup.outputs.minecraft_version}}  
-          Mod version: ${{steps.var_setup.outputs.mod_version}}  
-          Archive base name: ${{steps.var_setup.outputs.archives_base_name}}  
+          | OUTPUTS           | VALUES                                          |
+          |-------------------|-------------------------------------------------|
+          | fabric_version    | ${{steps.var_setup.outputs.fabric_version}}     |
+          | minecraft_version | ${{steps.var_setup.outputs.minecraft_version}}  |
+          | mod_version       | ${{steps.var_setup.outputs.mod_version}}        |
+          | archive_base_name | ${{steps.var_setup.outputs.archive_base_name}} |
           " >> $GITHUB_STEP_SUMMARY
       - name: remame output file as build preview
-        run: cp -T build/libs/${{steps.var_setup.outputs.archives_base_name}}-${{steps.var_setup.outputs.mod_version}}.jar ${{steps.var_setup.outputs.archives_base_name}}-${{steps.var_setup.outputs.mod_version}}-build.${{github.run_number}}.jar
+        run: cp -T build/libs/${{steps.var_setup.outputs.archive_base_name}}-${{steps.var_setup.outputs.mod_version}}.jar ${{steps.var_setup.outputs.archive_base_name}}-${{steps.var_setup.outputs.mod_version}}-build.${{github.run_number}}.jar
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{steps.var_setup.outputs.archives_base_name}}-${{steps.var_setup.outputs.mod_version}}-build.${{github.run_number}}
-          path: ${{steps.var_setup.outputs.archives_base_name}}-${{steps.var_setup.outputs.mod_version}}-build.${{github.run_number}}.jar
+          name: ${{steps.var_setup.outputs.archive_base_name}}-${{steps.var_setup.outputs.mod_version}}-build.${{github.run_number}}
+          path: ${{steps.var_setup.outputs.archive_base_name}}-${{steps.var_setup.outputs.mod_version}}-build.${{github.run_number}}.jar
           if-no-files-found: 'error'
           overwrite: 'true'
   test:
