@@ -72,5 +72,6 @@ jobs:
         with:
           mc: ${{env.minecraft_version}}
           fabric-api: ${{env.fabric_version}}
+          dummy-assets: false
           xvfb: false
           headlessmc-command: -lwjgl --jvm -Djava.awt.headless=true
