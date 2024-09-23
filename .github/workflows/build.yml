@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       fabric_version: ${{steps.var_setup.outputs.fabric_version}}
-      Minecraft version: ${{steps.var_setup.outputs.minecraft_version}}
-      Mod version: ${{steps.var_setup.outputs.mod_version}}
-      Archive base name: ${{steps.var_setup.outputs.archives_base_name}}
+      minecraft_version: ${{steps.var_setup.outputs.minecraft_version}}
+      mod_version: ${{steps.var_setup.outputs.mod_version}}
+      archive_base_name: ${{steps.var_setup.outputs.archives_base_name}}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -51,9 +51,9 @@ jobs:
     needs: build
     env:
       fabric_version: ${{needs.build.outputs.fabric_version}}
-      Minecraft version: ${{needs.build.outputs.minecraft_version}}
-      Mod version: ${{needs.build.outputs.mod_version}}
-      Archive base name: ${{needs.build.outputs.archives_base_name}}
+      minecraft_version: ${{needs.build.outputs.minecraft_version}}
+      mod_version: ${{needs.build.outputs.mod_version}}
+      archive_base_name: ${{needs.build.outputs.archive_base_name}}
     steps:
       - name: Download dependency mods
         run: |
@@ -63,7 +63,7 @@ jobs:
       - name: Download main mod artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{env.archives_base_name}}-${{env.mod_version}}-build.${{github.run_number}}
+          name: ${{env.archive_base_name}}-${{env.mod_version}}-build.${{github.run_number}}
           path: run/mods
       - name: Mc-Runtime-Test
         uses: 3arthqu4ke/mc-runtime-test@2.4.0
