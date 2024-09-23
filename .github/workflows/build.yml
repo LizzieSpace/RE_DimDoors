@@ -32,11 +32,11 @@ jobs:
         run: |
           echo "
           | OUTPUTS           | VALUES                                          |
-          |-------------------|-------------------------------------------------|
+          |:-----------------:|:-----------------------------------------------:|
           | fabric_version    | ${{steps.var_setup.outputs.fabric_version}}     |
           | minecraft_version | ${{steps.var_setup.outputs.minecraft_version}}  |
           | mod_version       | ${{steps.var_setup.outputs.mod_version}}        |
-          | archive_base_name | ${{steps.var_setup.outputs.archive_base_name}} |
+          | archive_base_name | ${{steps.var_setup.outputs.archive_base_name}}  |
           " >> $GITHUB_STEP_SUMMARY
       - name: remame output file as build preview
         run: cp -T build/libs/${{steps.var_setup.outputs.archive_base_name}}-${{steps.var_setup.outputs.mod_version}}.jar ${{steps.var_setup.outputs.archive_base_name}}-${{steps.var_setup.outputs.mod_version}}-build.${{github.run_number}}.jar
@@ -77,4 +77,3 @@ jobs:
           mc-runtime-test: 'fabric'
           fabric-api: ${{env.fabric_version}}
           hmc-version: '2.3.0'
-          headlessmc-command: -lwjgl --retries 3 --jvm -Djava.awt.headless=true
