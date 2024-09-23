@@ -9,7 +9,7 @@ jobs:
       fabric_version: ${{steps.var_setup.outputs.fabric_version}}
       minecraft_version: ${{steps.var_setup.outputs.minecraft_version}}
       mod_version: ${{steps.var_setup.outputs.mod_version}}
-      archive_base_name: ${{steps.var_setup.outputs.archives_base_name}}
+      archive_base_name: ${{steps.var_setup.outputs.archive_base_name}}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
