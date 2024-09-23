@@ -71,11 +71,6 @@ jobs:
         uses: 3arthqu4ke/mc-runtime-test@2.4.0
         with:
           mc: ${{env.minecraft_version}}
-          modloader: 'fabric'
-          regex: '.*fabric.*'
-          java: '17'
-          mc-runtime-test: 'fabric'
           fabric-api: ${{env.fabric_version}}
-          hmc-version: '2.3.0'
           xvfb: false
           headlessmc-command: -lwjgl --jvm -Djava.awt.headless=true
