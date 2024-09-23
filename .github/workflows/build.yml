@@ -1,8 +1,9 @@
-name: Build
+name: Build & Test
 run-name: Building repository
 on: [ push, workflow_call ]
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -20,10 +21,11 @@ jobs:
           ./gradlew build
       - name: setup env variables
         run: |
-          grep -E "(minecraft_version)|(mod_version=)|(archives_base_name=)" gradle.properties >> "$GITHUB_ENV"
+          grep -E "(fabric_version=)|(minecraft_version=)|(mod_version=)|(archives_base_name=)" gradle.properties >> "$GITHUB_ENV"
       - name: check env variables
         run: |
           echo "
+          fabric_version: ${{env.fabric_version}}
           Minecraft version: ${{env.minecraft_version}}  
           Mod version: ${{env.mod_version}}  
           Archive base name: ${{env.archives_base_name}}  
@@ -37,3 +39,29 @@ jobs:
           path: ${{env.archives_base_name}}-${{env.mod_version}}-build.${{github.run_number}}.jar
           if-no-files-found: 'error'
           overwrite: 'true'
+  test:
+    name: Runtime test
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download dependency mods
+        run: |
+          curl --create-dirs -O --output-dir run/mods https://cdn.modrinth.com/data/b8Q0BxnV/versions/OH74ACY1/dimdoors-5.4.1-fabric.jar
+          curl --create-dirs -O --output-dir run/mods https://cdn.modrinth.com/data/9s6osm5g/versions/2xQdCMyG/cloth-config-11.1.136-fabric.jar
+          curl --create-dirs -O --output-dir run/mods https://cdn.modrinth.com/data/lhGA9TYQ/versions/WbL7MStR/architectury-9.2.14-fabric.jar
+      - name: Download main mod artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{env.archives_base_name}}-${{env.mod_version}}-build.${{github.run_number}}
+          path: run/mods
+      - name: Mc-Runtime-Test
+        uses: 3arthqu4ke/mc-runtime-test@2.4.0
+        with:
+          mc: ${{env.minecraft_version}}
+          modloader: 'fabric'
+          regex: '.*fabric.*'
+          java: '17'
+          mc-runtime-test: 'fabric'
+          fabric-api: ${{env.fabric_version}}
+          hmc-version: '2.3.0'
+          headlessmc-command: -lwjgl --retries 3 --jvm -Djava.awt.headless=true
