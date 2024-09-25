@@ -1,0 +1,48 @@
+name: Test Build
+run-name: build configurations
+on:
+  push:
+    paths:
+      - build.gradle
+      - gradle.properties
+      - gradlew
+      - gradlew.bat
+      - settings.gradle
+      - gradle
+
+jobs:
+  build:
+    name: Testing Build configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+
+      - name: setup env variables
+        id: var_setup
+        run: |
+          grep -E "^((fabric|minecraft)?_?version|archive_name)=" gradle.properties >> "$GITHUB_OUTPUT"
+
+      - name: Append variables to Summary
+        run: |
+          echo "
+          #### Project Information:
+          | archive_name                              | Version                              | minecraft_version                              | fabric_version                               |
+          |:-----------------------------------------:|:------------------------------------:|:----------------------------------------------:|:--------------------------------------------:|
+          | ${{steps.var_setup.outputs.archive_name}} | ${{steps.var_setup.outputs.version}} | ${{steps.var_setup.outputs.minecraft_version}} |  ${{steps.var_setup.outputs.fabric_version}} |
+          " >> $GITHUB_STEP_SUMMARY
+          
