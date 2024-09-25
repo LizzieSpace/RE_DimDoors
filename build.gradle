@@ -3,11 +3,11 @@ plugins {
     id 'maven-publish'
 }
 
-version = project.mod_version
+version = project.version
 group = project.maven_group
 
 base {
-    archivesName = project.archives_base_name
+    archivesName = project.archive_name
 }
 
 loom {
@@ -29,16 +29,7 @@ loom {
         server {
             runDir "run/server"
         }
-
-        gametestServer {
-            server()
-            name "Headlesss GameTests"
-            vmArg "-Dfabric-api.gametest"
-            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
-            runDir "run/gametest"
-        }
     }
-
 }
 
 repositories {
@@ -76,7 +67,7 @@ repositories {
 
 configurations.configureEach {
     resolutionStrategy {
-        force("net.fabricmc:fabric-loader:$loader_version")
+        force("net.fabricmc:fabric-loader:${loader_version}")
     }
 }
 
@@ -95,20 +86,20 @@ def devEnv(DependencyHandler deps) {
 }
 
 def setup(DependencyHandler deps) {
-    deps.minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    deps.minecraft "com.mojang:minecraft:${minecraft_version}"
     deps.mappings loom.layered() {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-1.20.1:2023.09.03@zip")
     }
-    deps.modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    deps.modImplementation "net.fabricmc:fabric-loader:${loader_version}"
 }
 
 def required(DependencyHandler deps) {
-    deps.modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    deps.modImplementation "maven.modrinth:dimensionaldoors:${rootProject.dimdoors_version}-fabric"
+    deps.modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}+${minecraft_version}"
+    deps.modImplementation "maven.modrinth:dimensionaldoors:${dimdoors_version}-fabric"
 
-    deps.modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
-    deps.modApi "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config}"
+    deps.modApi "dev.architectury:architectury-fabric:${architectury_version}"
+    deps.modApi "me.shedaniel.cloth:cloth-config-fabric:${cloth_config}"
 
     includeCompile(deps, "com.flowpowered:flow-math:1.0.3")
     includeCompile(deps, "org.jgrapht:jgrapht-core:1.1.0")
@@ -122,26 +113,22 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
-    inputs.property "minecraft_version", project.minecraft_version
-    inputs.property "loader_version", project.loader_version
-    inputs.property "dimdoors_version", project.dimdoors_version
+    inputs.property "version", version
+    inputs.property "minecraft_version", minecraft_version
+    inputs.property "loader_version", loader_version
+    inputs.property "dimdoors_version", dimdoors_version
     filteringCharset "UTF-8"
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version,
-                "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version,
-                "dimdoors_version": project.dimdoors_version
+        expand "version": version,
+                "minecraft_version": minecraft_version,
+                "loader_version": loader_version,
+                "dimdoors_version": dimdoors_version
     }
 }
 
 def targetJavaVersion = 17
 tasks.withType(JavaCompile).configureEach {
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
     it.options.encoding = "UTF-8"
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         it.options.release.set(targetJavaVersion)
@@ -161,7 +148,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}" }
+        rename { "${it}_${archive_name}" }
     }
 }
 
@@ -169,7 +156,7 @@ jar {
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
+            artifactId = archive_name
             from components.java
         }
     }
