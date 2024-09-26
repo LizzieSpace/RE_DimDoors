@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - src
+  workflow_dispatch:
 
 jobs:
   versioning:
@@ -78,7 +79,7 @@ jobs:
         run: |
           echo "
           | archive_name                               | Version                               | minecraft_version                               | fabric_version                               |
-          |:-----------------------------------------------:|:-------------------------------------:|:-----------------------------------------------:|:--------------------------------------------:|
+          |:------------------------------------------:|:-------------------------------------:|:-----------------------------------------------:|:--------------------------------------------:|
           | ${{steps.build_vars.outputs.archive_name}} | ${{steps.build_vars.outputs.version}} | ${{steps.build_vars.outputs.minecraft_version}} | ${{steps.build_vars.outputs.fabric_version}} |
           " >> $GITHUB_STEP_SUMMARY
 
