@@ -33,7 +33,7 @@ jobs:
           configFilePath: ".github/gitVersion.yml"
 
       - name: print outputs
-        run: echo "${{toJSON(steps.gitversion.outputs)}}`"
+        run: echo '${{toJSON(steps.gitversion.outputs)}}'
 
   build:
     name: Build
