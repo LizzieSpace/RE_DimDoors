@@ -54,7 +54,7 @@ jobs:
         id: version_updater
         run: |
           echo old_version=$(sed -n 's/^version=\(.*\)/\1/p' gradle.properties) >> "$GITHUB_OUTPUT"
-          sed -i 's/\(^version=\).*/\1${{jobs.versioning.outputs.SemVer}}
+          sed -i 's/\(^version=\).*/\1${{needs.versioning.outputs.SemVer}}
 
       - name: Setup Java
         uses: actions/setup-java@v4
