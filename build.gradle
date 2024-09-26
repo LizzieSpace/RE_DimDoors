@@ -58,6 +58,7 @@ repositories {
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
     }
+    maven { url = "https://cursemaven.com" } content { includeGroup "curse.maven" }
     maven { url = "https://maven.shedaniel.me/" } // Cloth Config
     maven { url = "https://maven.architectury.dev/" } // Architectury API
     maven { url = "https://jitpack.io" } // poly2tri
@@ -74,7 +75,6 @@ configurations.configureEach {
 def includeCompile(DependencyHandler deps, entry) {
     project.dependencies {
         deps.modApi(entry)
-        deps.include(entry)
     }
 }
 
@@ -101,9 +101,14 @@ def required(DependencyHandler deps) {
     deps.modApi "dev.architectury:architectury-fabric:${architectury_version}"
     deps.modApi "me.shedaniel.cloth:cloth-config-fabric:${cloth_config}"
 
-    includeCompile(deps, "com.flowpowered:flow-math:1.0.3")
-    includeCompile(deps, "org.jgrapht:jgrapht-core:1.1.0")
-    includeCompile(deps, "com.github.DimensionalDevelopment:poly2tri.java:0.1.1")
+    deps.modApi "com.flowpowered:flow-math:1.0.3"
+    deps.modApi "org.jgrapht:jgrapht-core:1.1.0"
+    deps.modApi "com.github.DimensionalDevelopment:poly2tri.java:0.1.1"
+
+    deps.modApi "curse.maven:cardinal-components-base-${cardinal_components}:${cardinal_components_base}"
+    deps.modApi "curse.maven:cardinal-components-item-${cardinal_components}:${cardinal_components_item}"
+    deps.modApi "curse.maven:cardinal-components-world-${cardinal_components}:${cardinal_components_world}"
+    deps.modApi "curse.maven:cardinal-components-chunk-${cardinal_components}:${cardinal_components_chunk}"
 }
 
 dependencies {
