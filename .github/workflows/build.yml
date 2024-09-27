@@ -5,6 +5,9 @@ on:
   push:
     paths:
       - src
+  pull_request:
+    paths:
+      - src
   workflow_dispatch:
 
 jobs:
@@ -33,12 +36,14 @@ jobs:
           configFilePath: ".github/gitVersion.yml"
 
       - name: print outputs
-        run: echo ${{toJSON(steps.gitversion.outputs)}}
+        run: echo '${{toJSON(steps.gitversion.outputs)}}'
 
   build:
     name: Build
     runs-on: ubuntu-latest
     needs: versioning
+    permissions:
+      contents: write
     outputs:
       fabric_version: ${{steps.build_vars.outputs.fabric_version}}
       minecraft_version: ${{steps.build_vars.outputs.minecraft_version}}
@@ -54,7 +59,7 @@ jobs:
         id: version_updater
         run: |
           echo old_version=$(sed -n 's/^version=\(.*\)/\1/p' gradle.properties) >> "$GITHUB_OUTPUT"
-          sed -i 's/\(^version=\).*/\1${{needs.versioning.outputs.SemVer}}
+          sed -i 's/\(^version=\).*/\1${{needs.versioning.outputs.SemVer}}/' gradle.properties
 
       - name: Setup Java
         uses: actions/setup-java@v4
