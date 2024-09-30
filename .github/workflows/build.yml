@@ -5,9 +5,15 @@ on:
   push:
     paths:
       - src
+    branches:
+      - main
+      - dev
+      - release/**
   pull_request:
     paths:
       - src
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -49,7 +55,7 @@ jobs:
       minecraft_version: ${{steps.build_vars.outputs.minecraft_version}}
       archive_name: ${{steps.build_vars.outputs.archive_name}}
 
-      update-sha: ${{steps.bump_remote.outputs.commit-sha}}
+      update-sha: ${{steps.bump_remote.outputs.pull-request-head-sha}}
 
     steps:
       - name: Checkout sources
@@ -105,21 +111,33 @@ jobs:
           overwrite: 'true'
 
       - name: Bump version
+        if: github.event_name == 'push'
         id: bump_remote
-        uses: test-room-7/action-update-file@v1
+        uses: peter-evans/create-pull-request@v7
         with:
-          file-path: gradle.properties
-          commit-msg: >
+          add-paths: |
+            gradle.properties
+          commit-message: >
             chore(gradle): update version to ${{needs.versioning.outputs.SemVer}}
             
             
             Updated the version number from ${{steps.version_updater.outputs.old_version}} 
             to ${{needs.versioning.outputs.SemVer}} in the gradle.properties file to reflect 
             the latest release.
-          github-token: ${{github.token}}
-          branch: ${{github.ref_name}}
+          branch: actions/version-bump
+          title: 'Bump Version'
+          body: >
+            Updated the version number from ${{steps.version_updater.outputs.old_version}} 
+            to ${{needs.versioning.outputs.SemVer}} in the gradle.properties file to reflect 
+            the latest release.
+            
+            
+            Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
+          assignees: LizzieSpace
+          reviewers: LizzieSpace
 
   tagging:
+    if: github.event_name == 'push'
     name: Tag release
     runs-on: ubuntu-latest
     permissions:
@@ -138,12 +156,33 @@ jobs:
       - name: GH Release
         uses: softprops/action-gh-release@v2.0.8
         with:
-          draft: true
+          prerelease: ${{github.ref_name != 'main'}}
+          make_latest: ${{github.ref_name == 'main'}}
           tag_name: v${{needs.versioning.outputs.SemVer}}
           generate_release_notes: true
           fail_on_unmatched_files: true
           target_commitish: ${{needs.build.outputs.update-sha}}
           files: ${{needs.build.outputs.archive_name}}-${{needs.versioning.outputs.SemVer}}.jar
+
+      - name: Delete Older Beta Releases
+        uses: s00d/delete-older-releases@0.2.1
+        with:
+          keep_latest: 3
+          delete_tag_pattern: beta
+          delete_type: prerelease
+          delete_tags: true
+          delete_branch: ${{github.ref_name}}
+
+      - name: Delete Older Alpha Releases
+        uses: s00d/delete-older-releases@0.2.1
+        with:
+          keep_latest: 3
+          delete_tag_pattern: alpha
+          delete_type: prerelease
+          delete_tags: true
+          delete_branch: ${{github.ref_name}}
+
+
 
 
 
