@@ -13,6 +13,9 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.liz_space.re_dimdoors.RE_DimDoorsMain.CONFIG;
+import static org.liz_space.re_dimdoors.client.RE_DimDoorsClient.CLIENT_LOGGER;
+
 @Environment(EnvType.CLIENT)
 @Mixin(DimensionalPortalRenderer.class)
 public class DimensionalPortalRendererMixin {
@@ -68,10 +71,18 @@ public class DimensionalPortalRendererMixin {
      */
     @ModifyVariable(method = "<clinit>", at = @At("STORE"), ordinal = 0)
     private static ModelPart.Cube injectSmall(ModelPart.Cube cuboid) {
-        return createCuboid(
-                .2F, .2F, -.1F,
-                15.8F, 15.8f, .01F
-        );
+        if (CONFIG.client.getDimPortalRendererMixin()) {
+            CLIENT_LOGGER.debug("Injecting small cuboid values");
+
+            return createCuboid(
+                    CONFIG.client.dimPortalRenderer.smallPortal.getOriginX(),
+                    CONFIG.client.dimPortalRenderer.smallPortal.getOriginY(),
+                    CONFIG.client.dimPortalRenderer.smallPortal.getOriginZ(),
+                    CONFIG.client.dimPortalRenderer.smallPortal.getDimensionX(),
+                    CONFIG.client.dimPortalRenderer.smallPortal.getDimensionY(),
+                    CONFIG.client.dimPortalRenderer.smallPortal.getDimensionZ()
+            );
+        } else return cuboid;
     }
 
     /**
@@ -82,9 +93,17 @@ public class DimensionalPortalRendererMixin {
      */
     @ModifyVariable(method = "<clinit>", at = @At("STORE"), ordinal = 1)
     private static ModelPart.Cube injectBig(ModelPart.Cube cuboid) {
-        return createCuboid(
-                .2F, .2F, -.1F,
-                15.8F, 31.8f, .01F
-        );
+        if (CONFIG.client.getDimPortalRendererMixin()) {
+            CLIENT_LOGGER.debug("Injecting big cuboid values");
+
+            return createCuboid(
+                    CONFIG.client.dimPortalRenderer.bigPortal.getOriginX(),
+                    CONFIG.client.dimPortalRenderer.bigPortal.getOriginY(),
+                    CONFIG.client.dimPortalRenderer.bigPortal.getOriginZ(),
+                    CONFIG.client.dimPortalRenderer.bigPortal.getDimensionX(),
+                    CONFIG.client.dimPortalRenderer.bigPortal.getDimensionY(),
+                    CONFIG.client.dimPortalRenderer.bigPortal.getDimensionZ()
+            );
+        } else return cuboid;
     }
 }
