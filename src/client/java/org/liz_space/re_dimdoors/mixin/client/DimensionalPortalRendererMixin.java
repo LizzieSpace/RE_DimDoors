@@ -72,7 +72,8 @@ public class DimensionalPortalRendererMixin {
     @ModifyVariable(method = "<clinit>", at = @At("STORE"), ordinal = 0)
     private static ModelPart.Cube injectSmall(ModelPart.Cube cuboid) {
         if (CONFIG.client.getDimPortalRendererMixin()) {
-            CLIENT_LOGGER.debug("Injecting small cuboid values");
+            // TODO: REORGANIZE LOGGING
+            CLIENT_LOGGER.info("Injecting small cuboid values");
 
             return createCuboid(
                     CONFIG.client.dimPortalRenderer.smallPortal.getOriginX(),
@@ -94,7 +95,8 @@ public class DimensionalPortalRendererMixin {
     @ModifyVariable(method = "<clinit>", at = @At("STORE"), ordinal = 1)
     private static ModelPart.Cube injectBig(ModelPart.Cube cuboid) {
         if (CONFIG.client.getDimPortalRendererMixin()) {
-            CLIENT_LOGGER.debug("Injecting big cuboid values");
+            CLIENT_LOGGER.info("Injecting big cuboid values");
+            // TODO: REORGANIZE LOGGING
 
             return createCuboid(
                     CONFIG.client.dimPortalRenderer.bigPortal.getOriginX(),

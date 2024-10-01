@@ -14,8 +14,6 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 import static org.liz_space.re_dimdoors.RE_DimDoorsMain.MOD_ID;
 
@@ -26,7 +24,6 @@ public class ModConfig implements ConfigData {
     @ConfigEntry.Category("Common")
     public Common common = new Common();
 
-    @Environment(EnvType.CLIENT)
     @ConfigEntry.Gui.TransitiveObject
     @ConfigEntry.Category("Client")
     public Client client = new Client();
@@ -48,17 +45,13 @@ public class ModConfig implements ConfigData {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Client {
 
-        @ConfigEntry.Gui.CollapsibleObject
-        public DimPortalRendererMixin dimPortalRenderer = new DimPortalRendererMixin();
         @Comment("Overrides the hardcoded values for DimPortalRenderer")
         boolean dimPortalRendererMixin = false;
 
-        public boolean getDimPortalRendererMixin() {
-            return dimPortalRendererMixin;
-        }
+        @ConfigEntry.Gui.CollapsibleObject
+        public DimPortalRendererMixin dimPortalRenderer = new DimPortalRendererMixin();
 
         public static class DimPortalRendererMixin {
 
@@ -133,6 +126,10 @@ public class ModConfig implements ConfigData {
                     return originZ;
                 }
             }
+        }
+
+        public boolean getDimPortalRendererMixin() {
+            return dimPortalRendererMixin;
         }
     }
 

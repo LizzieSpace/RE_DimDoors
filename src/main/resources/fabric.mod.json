@@ -10,10 +10,10 @@
   "contact": {},
   "license": "GNU GPL v3",
   "icon": "resourcepacks/default/pack.png",
-  "environment": "client",
+  "environment": "*",
   "entrypoints": {
     "preLaunch": [
-      "RE_DimDoorsPreLaunch"
+      "org.liz_space.re_dimdoors.RE_DimDoorsPreLaunch"
     ],
     "client": [
       "org.liz_space.re_dimdoors.client.RE_DimDoorsClient"
@@ -21,7 +21,7 @@
     "main": [
       "org.liz_space.re_dimdoors.RE_DimDoorsMain"
     ],
-    "mod-menu": [
+    "modmenu": [
       "org.liz_space.re_dimdoors.client.ModMenuIntegration"
     ]
   },

@@ -17,12 +17,17 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.liz_space.re_dimdoors.ModConfig;
 
+import static org.liz_space.re_dimdoors.client.RE_DimDoorsClient.CLIENT_LOGGER;
+
 @Environment(EnvType.CLIENT)
-class ModMenuIntegration implements ModMenuApi {
+public class ModMenuIntegration implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> AutoConfig.getConfigScreen(ModConfig.class, parent).get();
+        return parent -> {
+            CLIENT_LOGGER.info("ModMenuIntegration getting config screen");
+            return AutoConfig.getConfigScreen(ModConfig.class, parent).get();
+        };
     }
 
 }

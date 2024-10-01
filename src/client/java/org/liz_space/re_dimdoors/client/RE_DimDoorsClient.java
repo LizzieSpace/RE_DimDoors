@@ -7,9 +7,7 @@ import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
-import org.slf4j.event.Level;
 
-import static org.liz_space.re_dimdoors.RE_DimDoorsMain.CONFIG;
 import static org.liz_space.re_dimdoors.RE_DimDoorsMain.MOD_ID;
 
 public class RE_DimDoorsClient implements ClientModInitializer {
@@ -17,10 +15,8 @@ public class RE_DimDoorsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        CLIENT_LOGGER.info("tampering with dimPortal rendering");
-        if (CONFIG.common.getDebug()) {
-            LogUtils.configureRootLoggingLevel(Level.DEBUG);
-        }
+        //TODO: REORGANIZE LOGGING
+        CLIENT_LOGGER.info("Client initialized Successfully");
 
 //        public static final ResourceLocation id = new ResourceLocation("dimdoors");
 
