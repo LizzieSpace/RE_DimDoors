@@ -10,15 +10,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static org.liz_space.re_dimdoors.RE_DimDoorsMain.CONFIG;
+
 @Mixin(DetachedRiftBlockEntity.class)
 public class DetachedRiftBlockEntityMixin {
 
     @Inject(method = "applySpreadDecay", cancellable = true, at = @At(value = "INVOKE", target = "Lorg/dimdev/dimdoors/world/decay/Decay;decayBlock(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lorg/dimdev/dimdoors/world/decay/DecaySource;)V"))
     private void injectBreak(ServerLevel world, BlockPos pos, CallbackInfo ci, @Local(ordinal = 1) BlockPos selected, @Local float radius) {
-        Vec3 targetCenter = selected.getCenter();
-        Vec3 posCenter = pos.getCenter();
-        if (posCenter.distanceTo(targetCenter) >= (int) radius) {
-            ci.cancel();
+        if (CONFIG.common.getRadialDecayMixin()) {
+            Vec3 targetCenter = selected.getCenter();
+            Vec3 posCenter = pos.getCenter();
+            if (posCenter.distanceTo(targetCenter) >= (int) radius) {
+                ci.cancel();
+            }
         }
     }
 }

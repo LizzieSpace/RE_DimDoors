@@ -8,15 +8,21 @@
     "liz c."
   ],
   "contact": {},
-  "license": "MIT",
+  "license": "GNU GPL v3",
   "icon": "resourcepacks/default/pack.png",
-  "environment": "client",
+  "environment": "*",
   "entrypoints": {
+    "preLaunch": [
+      "org.liz_space.re_dimdoors.RE_DimDoorsPreLaunch"
+    ],
     "client": [
       "org.liz_space.re_dimdoors.client.RE_DimDoorsClient"
     ],
     "main": [
       "org.liz_space.re_dimdoors.RE_DimDoorsMain"
+    ],
+    "modmenu": [
+      "org.liz_space.re_dimdoors.client.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -30,6 +36,12 @@
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "minecraft": "${minecraft_version}",
-    "dimdoors": "${dimdoors_version}"
+    "dimdoors": "${dimdoors_version}",
+    "cloth-config": "${cloth_config}"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "dimdoors"
+    }
   }
 }

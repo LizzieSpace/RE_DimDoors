@@ -35,8 +35,7 @@ Just download it, unzip it and test it out!
 We welcome contributions! Please fork the repository and create a pull request for review.
 ### Prerequisites
 
-- Java 17 or later
-- A compatible build tool (e.g., Gradle)
+- Java 17
 
 ### Building
 
@@ -56,19 +55,15 @@ chmod +x gradlew
 
 ### Running
 
-- Add the required version of DimDoors to the `./run/mods` folder
-- Run the following commands to download and start the project:
+you may run the project in a test environmet with the gradle task `runClient`
 
 ```sh
-curl -O https://cdn.modrinth.com/data/b8Q0BxnV/versions/OH74ACY1/dimdoors-5.4.1-fabric.jar
-mkdir -p run/mods
-mv dimdoors-5.4.1-fabric.jar run/mods/
 ./gradlew runClient
 ```
 
 ## License
 
-This project is licensed under the GNU GPL v3 License. See the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the GNU GPL v3 License. See the [LICENSE](LICENSE.md) for details.
 
 ## Contact
 
