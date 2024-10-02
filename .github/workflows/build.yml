@@ -136,7 +136,7 @@ jobs:
             Updated the version number from ${{steps.version_updater.outputs.old_version}} 
             to ${{needs.versioning.outputs.SemVer}} in the gradle.properties file to reflect 
             the latest release.
-          branch: actions/version-bump
+          branch: release/${{needs.versioning.outputs.SemVer}}
           title: 'Bump Version'
           body: >
             Updated the version number from ${{steps.version_updater.outputs.old_version}} 
