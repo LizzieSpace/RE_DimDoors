@@ -76,7 +76,6 @@ def devEnv(DependencyHandler deps) {
     deps.modLocalRuntime "maven.modrinth:lazydfu:${lazy_dfu_version}"
     deps.modLocalRuntime "dev.emi:emi-fabric:${emi_version}+${minecraft_version}"
     deps.modLocalRuntime "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
-    deps.modLocalRuntime "maven.modrinth:dcwa:4.1" // disable custom worlds advice
 }
 
 def setup(DependencyHandler deps) {
