@@ -4,14 +4,26 @@ run-name: Building repository
 on:
   push:
     paths:
-      - src
+      - src/**
+      - build.gradle
+      - gradle.properties
+      - gradlew
+      - gradlew.bat
+      - settings.gradle
+      - gradle
     branches:
       - main
       - dev
       - release/**
   pull_request:
     paths:
-      - src
+      - src/**
+      - build.gradle
+      - gradle.properties
+      - gradlew
+      - gradlew.bat
+      - settings.gradle
+      - gradle
     branches:
       - main
   workflow_dispatch:
