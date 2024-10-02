@@ -1,8 +1,10 @@
 {
   "text.autoconfig.re_dimdoors.title": "Settings: ",
   "text.autoconfig.re_dimdoors.category.Common": "Common",
+  "text.autoconfig.re_dimdoors.option.common.@PrefixText": "Settings relevant to both the Client and Server",
   "text.autoconfig.re_dimdoors.option.common.radialDecayMixin": "Radial Decay",
   "text.autoconfig.re_dimdoors.category.Client": "Client",
+  "text.autoconfig.re_dimdoors.option.client.@PrefixText": "Settings relevant to the client",
   "text.autoconfig.re_dimdoors.option.client.dimPortalRendererMixin": "Alter Dim Portal rendering",
   "text.autoconfig.re_dimdoors.option.client.dimPortalRenderer": "Dim Portal rendering settings",
   "text.autoconfig.re_dimdoors.option.client.dimPortalRenderer.bigPortal": "'Big' Portal",

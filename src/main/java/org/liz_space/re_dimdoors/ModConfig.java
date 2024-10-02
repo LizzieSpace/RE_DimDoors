@@ -18,17 +18,21 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import static org.liz_space.re_dimdoors.RE_DimDoorsMain.MOD_ID;
 
 @Config(name = MOD_ID)
+@Config.Gui.Background(value = "dimdoors:textures/other/warp.png")
 public class ModConfig implements ConfigData {
 
     @ConfigEntry.Gui.TransitiveObject
     @ConfigEntry.Category("Common")
+    @ConfigEntry.Gui.PrefixText
     public Common common = new Common();
 
     @ConfigEntry.Gui.TransitiveObject
     @ConfigEntry.Category("Client")
+    @ConfigEntry.Gui.PrefixText
     public Client client = new Client();
-
     public static class Common {
+
+
         @Comment("patches the Detached Rift decay function, making the decay pattern spherical instead of cubic.")
         boolean radialDecayMixin = true;
 
@@ -47,11 +51,13 @@ public class ModConfig implements ConfigData {
 
     public static class Client {
 
-        @Comment("Overrides the hardcoded values for DimPortalRenderer")
-        boolean dimPortalRendererMixin = false;
-
         @ConfigEntry.Gui.CollapsibleObject
+        @ConfigEntry.Gui.TransitiveObject
+        @Comment("Edit values for the portal polygons.\nRequires restart.")
         public DimPortalRendererMixin dimPortalRenderer = new DimPortalRendererMixin();
+        @ConfigEntry.Gui.RequiresRestart
+        @Comment("Enables editing values for the portal polygons.\nRequires restart")
+        boolean dimPortalRendererMixin = false;
 
         public static class DimPortalRendererMixin {
 
@@ -62,11 +68,17 @@ public class ModConfig implements ConfigData {
             public smallPortal smallPortal = new smallPortal();
 
             public static class bigPortal {
+                @ConfigEntry.Gui.RequiresRestart
                 float originX = .2F;
+                @ConfigEntry.Gui.RequiresRestart
                 float originY = .2F;
+                @ConfigEntry.Gui.RequiresRestart
                 float originZ = -.1F;
+                @ConfigEntry.Gui.RequiresRestart
                 float dimensionX = 15.8F;
+                @ConfigEntry.Gui.RequiresRestart
                 float dimensionY = 31.8f;
+                @ConfigEntry.Gui.RequiresRestart
                 float dimensionZ = .01F;
 
                 public float getDimensionX() {
@@ -95,11 +107,17 @@ public class ModConfig implements ConfigData {
             }
 
             public static class smallPortal {
+                @ConfigEntry.Gui.RequiresRestart
                 float originX = .2F;
+                @ConfigEntry.Gui.RequiresRestart
                 float originY = .2F;
+                @ConfigEntry.Gui.RequiresRestart
                 float originZ = -.1F;
+                @ConfigEntry.Gui.RequiresRestart
                 float dimensionX = 15.8F;
+                @ConfigEntry.Gui.RequiresRestart
                 float dimensionY = 15.8f;
+                @ConfigEntry.Gui.RequiresRestart
                 float dimensionZ = .01F;
 
                 public float getDimensionX() {
