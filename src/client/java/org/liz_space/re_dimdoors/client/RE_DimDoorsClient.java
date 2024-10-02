@@ -15,7 +15,8 @@ public class RE_DimDoorsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        CLIENT_LOGGER.info("tampering with dimPortal rendering");
+        //TODO: REORGANIZE LOGGING
+        CLIENT_LOGGER.info("Client initialized Successfully");
 
 //        public static final ResourceLocation id = new ResourceLocation("dimdoors");
 
