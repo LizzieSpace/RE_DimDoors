@@ -62,6 +62,7 @@ jobs:
     needs: versioning
     permissions:
       contents: write
+      pull-requests: write
     outputs:
       fabric_version: ${{steps.build_vars.outputs.fabric_version}}
       minecraft_version: ${{steps.build_vars.outputs.minecraft_version}}
