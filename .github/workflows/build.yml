@@ -186,7 +186,7 @@ jobs:
           delete_tags: true
           delete_branch: ${{github.ref_name}}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Delete Older Alpha Releases
         uses: s00d/delete-older-releases@0.2.1
@@ -197,7 +197,7 @@ jobs:
           delete_tags: true
           delete_branch: ${{github.ref_name}}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
 
 
