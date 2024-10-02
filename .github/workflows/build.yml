@@ -4,14 +4,26 @@ run-name: Building repository
 on:
   push:
     paths:
-      - src
+      - src/**
+      - build.gradle
+      - gradle.properties
+      - gradlew
+      - gradlew.bat
+      - settings.gradle
+      - gradle
     branches:
       - main
       - dev
       - release/**
   pull_request:
     paths:
-      - src
+      - src/**
+      - build.gradle
+      - gradle.properties
+      - gradlew
+      - gradlew.bat
+      - settings.gradle
+      - gradle
     branches:
       - main
   workflow_dispatch:
@@ -111,7 +123,7 @@ jobs:
           overwrite: 'true'
 
       - name: Bump version
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         id: bump_remote
         uses: peter-evans/create-pull-request@v7
         with:
@@ -137,7 +149,7 @@ jobs:
           reviewers: LizzieSpace
 
   tagging:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     name: Tag release
     runs-on: ubuntu-latest
     permissions:
