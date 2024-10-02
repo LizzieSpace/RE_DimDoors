@@ -111,7 +111,7 @@ jobs:
           overwrite: 'true'
 
       - name: Bump version
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         id: bump_remote
         uses: peter-evans/create-pull-request@v7
         with:
@@ -137,7 +137,7 @@ jobs:
           reviewers: LizzieSpace
 
   tagging:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     name: Tag release
     runs-on: ubuntu-latest
     permissions:
