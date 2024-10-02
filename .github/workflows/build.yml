@@ -94,6 +94,32 @@ jobs:
           if-no-files-found: 'error'
           overwrite: 'true'
 
+      - name: Bump version
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        id: bump_remote
+        uses: peter-evans/create-pull-request@v7
+        with:
+          add-paths: |
+            gradle.properties
+          commit-message: >
+            chore(gradle): update version to ${{needs.versioning.outputs.SemVer}}
+            
+            
+            Updated the version number from ${{steps.version_updater.outputs.old_version}} 
+            to ${{needs.versioning.outputs.SemVer}} in the gradle.properties file to reflect 
+            the latest release.
+          branch: release/${{needs.versioning.outputs.SemVer}}
+          title: 'Bump Version'
+          body: >
+            Updated the version number from ${{steps.version_updater.outputs.old_version}} 
+            to ${{needs.versioning.outputs.SemVer}} in the gradle.properties file to reflect 
+            the latest release.
+            
+            
+            Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
+          assignees: LizzieSpace
+          reviewers: LizzieSpace
+
   tagging:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     name: Update Tags
