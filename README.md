@@ -1,6 +1,6 @@
 # RE DimDoors
 
-[![Build](https://github.com/LizzieSpace/RE_DimDoors/actions/workflows/build.yml/badge.svg)](https://github.com/LizzieSpace/RE_DimDoors/actions/workflows/build.yml)
+[![Build](https://github.com/LizzieSpace/RE_DimDoors/actions/workflows/build.yml/badge.svg)](https://github.com/LizzieSpace/RE_DimDoors/actions/workflows/build.yml) [![](https://img.shields.io/badge/powered%20by-Nyx-blue)](https://github.com/mooltiverse/nyx)
 ## Overview
 
 `re_dimdoors` is a project that encompasses various enhancements and functional expansions over the original DimDoors
