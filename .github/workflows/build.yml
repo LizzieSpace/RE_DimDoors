@@ -38,6 +38,7 @@ jobs:
       current_version: ${{steps.build_vars.outputs.current_version}}
       previous_version: ${{steps.build_vars.outputs.previous_version}}
       new_release: ${{steps.build_vars.outputs.new_release}}
+      new_version: ${{steps.build_vars.outputs.new_version}}
 
     steps:
       - name: Checkout sources
@@ -100,7 +101,7 @@ jobs:
           if-no-files-found: 'error'
           overwrite: 'true'
 
-  tagging:
+  release:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     name: Update Tags
     runs-on: ubuntu-latest
@@ -112,6 +113,7 @@ jobs:
 
     steps:
       - name: Generate CHANGELOG
+        if: needs.build.outputs.new_version == 'true'
         id: changelog
         uses: requarks/changelog-action@v1
         with:
@@ -128,8 +130,8 @@ jobs:
         with:
           name: ${{needs.build.outputs.archive_name}}-${{needs.build.outputs.current_version}}
 
-      - name: Release Tag
-        if: needs.build.outputs.new_release == 'true'
+      - name: Release new Tag
+        if: needs.build.outputs.new_release == 'true' && needs.build.outputs.new_version == 'true'
         uses: softprops/action-gh-release@v2.0.8
         with:
           prerelease: ${{github.ref_name != 'main'}}
@@ -147,7 +149,7 @@ jobs:
           files: ${{needs.build.outputs.archive_name}}-${{needs.build.outputs.current_version}}.jar
 
       - name: Update "latest" tag
-        if: needs.build.outputs.new_release == 'true' && github.ref_name == 'main'
+        if: needs.build.outputs.new_release == 'true' && needs.build.outputs.new_version == 'true' && github.ref_name == 'main'
         uses: IsaacShelton/update-existing-release@v1.3.4
         with:
           token: ${{github.token}}
@@ -161,34 +163,25 @@ jobs:
           replace: true
           files: ${{needs.build.outputs.archive_name}}-${{needs.build.outputs.current_version}}.jar
 
+  removal:
+    name: remove older releases
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
-      - name: Delete Older Release candidates
+    strategy:
+      matrix:
+        tag_pattern:
+          - rc
+          - beta
+          - alpha
+
+    steps:
+      - name: Delete Release candidates
         uses: s00d/delete-older-releases@0.2.1
         with:
           keep_latest: 3
-          delete_tag_pattern: -rc.
-          delete_type: prerelease
-          delete_tags: true
-          delete_branch: ${{github.ref_name}}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Delete Older Beta Releases
-        uses: s00d/delete-older-releases@0.2.1
-        with:
-          keep_latest: 3
-          delete_tag_pattern: -beta.
-          delete_type: prerelease
-          delete_tags: true
-          delete_branch: ${{github.ref_name}}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Delete Older Alpha Releases
-        uses: s00d/delete-older-releases@0.2.1
-        with:
-          keep_latest: 3
-          delete_tag_pattern: -alpha.
+          delete_tag_pattern: "-${{matrix.tag_pattern}}."
           delete_type: prerelease
           delete_tags: true
           delete_branch: ${{github.ref_name}}
