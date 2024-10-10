@@ -61,7 +61,7 @@ jobs:
       - name: Append build variables to Summary
         run: |
           echo "
-          <table align="center">
+          <table>
           <tr><td align="center">
           <h3 align="center" > Dependencies: </h3>
           
