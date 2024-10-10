@@ -109,8 +109,8 @@
 				]
 			}
 		},
-		"publicationServices": ["GITHUB"],
 		"remoteRepositories": ["origin"],
+		"publicationServices": [],
 		"enabled": [
 			"ALPHA",
 			"BETA",

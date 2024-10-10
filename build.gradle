@@ -8,7 +8,7 @@ plugins {
     id 'maven-publish'
 }
 
-import com.mooltiverse.oss.nyx.Nyx;
+import com.mooltiverse.oss.nyx.Nyx
 
 final Nyx nyx = new Nyx()
 
@@ -24,10 +24,10 @@ nyx.infer()
 
 tasks.register('nyxFinalize') {
     doLast {
-        project.logger.lifecycle("branch: {}\nversion: {}", nyx.state().getBranch(), nyx.state().getVersion())
-        nyx.make();
-        nyx.mark();
-        nyx.publish();
+        project.logger.lifecycle("branch: {}\nversion: {}\nNew release: {}", nyx.state().getBranch(), nyx.state().getVersion(), nyx.state().getNewRelease())
+        nyx.make()
+        nyx.mark()
+        nyx.publish()
     }
 }
 
