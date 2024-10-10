@@ -127,7 +127,6 @@
 		"publicationServices": ["GITHUB"],
 		"remoteRepositories": ["origin"],
 		"enabled": [
-			"INTERNAL",
 			"ALPHA",
 			"BETA",
 			"RELEASE_CANDIDATE",
