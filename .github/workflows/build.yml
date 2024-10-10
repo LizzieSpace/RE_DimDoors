@@ -17,6 +17,9 @@ on:
       - '**/*gradle*'
     branches:
       - main
+      - dev
+      - release/**
+      - feature/**
   workflow_dispatch:
 
 jobs:
