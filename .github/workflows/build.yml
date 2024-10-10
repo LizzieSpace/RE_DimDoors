@@ -131,8 +131,6 @@ jobs:
           delete_type: prerelease
           delete_tags: true
           delete_branch: ${{github.ref_name}}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Delete Older Beta Releases
         uses: s00d/delete-older-releases@0.2.1
