@@ -44,7 +44,6 @@
 				"filterTags": "^({{configuration.releasePrefix}})?([0-9]\\d*)\\.([0-9]\\d*)\\.([0-9]\\d*)(-(alpha)(\\.([0-9]\\d*))?)?$",
 				"gitTagNames": ["{{version}}"],
 				"matchBranches": "^feature/\\.+$",
-				"matchWorkspaceStatus": "CLEAN",
 				"publish": "true",
 				"publishPreRelease": "true",
 				"identifiers": [
@@ -65,7 +64,6 @@
 				"filterTags": "^({{configuration.releasePrefix}})?([0-9]\\d*)\\.([0-9]\\d*)\\.([0-9]\\d*)(-(beta)(\\.([0-9]\\d*))?)?$",
 				"identifiers": [],
 				"matchBranches": "^dev$",
-				"matchWorkspaceStatus": "CLEAN",
 				"publish": "true",
 				"publishPreRelease": "true"
 			},
@@ -80,7 +78,6 @@
 				"filterTags": "^({{configuration.releasePrefix}})?([0-9]\\d*)\\.([0-9]\\d*)\\.([0-9]\\d*)(-(rc)(\\.([0-9]\\d*))?)?$",
 				"identifiers": [],
 				"matchBranches": "^release/.+$",
-				"matchWorkspaceStatus": "CLEAN",
 				"publish": "true",
 				"publishPreRelease": "true",
 				"versionRangeFromBranchName": true
