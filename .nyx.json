@@ -31,6 +31,9 @@
 				"gitTagForce": "true",
 				"gitTagNames": ["{{version}}", "latest"],
 				"matchBranches": "^main$",
+				"matchEnvironmentVariables": {
+					"CI": "^true$"
+				},
 				"matchWorkspaceStatus": "CLEAN",
 				"publish": "true"
 			},
@@ -44,6 +47,9 @@
 				"filterTags": "^({{configuration.releasePrefix}})?([0-9]\\d*)\\.([0-9]\\d*)\\.([0-9]\\d*)(-(alpha)(\\.([0-9]\\d*))?)?$",
 				"gitTagNames": ["{{version}}"],
 				"matchBranches": "^feature/\\.+$",
+				"matchEnvironmentVariables": {
+					"CI": "^true$"
+				},
 				"matchWorkspaceStatus": "CLEAN",
 				"publish": "true",
 				"publishPreRelease": "true",
@@ -64,6 +70,9 @@
 				"gitTagNames": ["{{version}}"],
 				"filterTags": "^({{configuration.releasePrefix}})?([0-9]\\d*)\\.([0-9]\\d*)\\.([0-9]\\d*)(-(beta)(\\.([0-9]\\d*))?)?$",
 				"identifiers": [],
+				"matchEnvironmentVariables": {
+					"CI": "^true$"
+				},
 				"matchBranches": "^dev$",
 				"matchWorkspaceStatus": "CLEAN",
 				"publish": "true",
@@ -80,6 +89,9 @@
 				"filterTags": "^({{configuration.releasePrefix}})?([0-9]\\d*)\\.([0-9]\\d*)\\.([0-9]\\d*)(-(rc)(\\.([0-9]\\d*))?)?$",
 				"identifiers": [],
 				"matchBranches": "^release/.+$",
+				"matchEnvironmentVariables": {
+					"CI": "^true$"
+				},
 				"matchWorkspaceStatus": "CLEAN",
 				"publish": "true",
 				"publishPreRelease": "true",
@@ -115,6 +127,7 @@
 		"publicationServices": ["GITHUB"],
 		"remoteRepositories": ["origin"],
 		"enabled": [
+			"INTERNAL",
 			"ALPHA",
 			"BETA",
 			"RELEASE_CANDIDATE",
