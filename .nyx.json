@@ -1,0 +1,148 @@
+{
+	"commitMessageConventions": {
+		"items": {
+			"CONVENTIONAL": {
+				"expression": "\\G(?:\\* )?+(?<type>build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)?+!?(?:\\((?<scope>[^()\\[\\]{}]*)\\)!?: )?(?<title>[^-\\s].*)\\s+(?:(?<issues>[^*].*#\\d+)*\\s{2,})?+(?<description>(?:[^*\\s]+\\s?)+)?\\n?(?:(?<footerIssues>[^*].*#\\d+)*\\s*)?+(?<breakingChange>\\n?BREAKING CHANGE: (?:(?<breakingTitle>.*)\\s{2,})(?<breakingDescription>(?:.+\\s?)+?)?)?+\\s*(?<signed>Signed-off-by: (?<signature>.+))?+(?:.*?\\n?)*|\\G[-]+\\n+(?<prInfo>(?<prSigned>Signed-off-by: (?<prSignature>.+))?+\\n?(?:Co-authored-by: (?<prCoAuthor>.+))?)(?:.*?\\n?)*",
+				"bumpExpressions": {
+					"patch": "(?m)^(?:\\* )?(fix|perf)(!{0})(\\([a-z ]+\\))?: (?!.*^(BREAKING( |-)CHANGE: )).*",
+					"major": "(?m)^(?:\\* )?[a-zA-Z0-9_]+(!: .*|.*^(BREAKING( |-)CHANGE: )).*",
+					"minor": "(?m)^(?:\\* )?feat(!{0})(\\([a-z ]+\\))?: (?!.*^(BREAKING( |-)CHANGE: )).*"
+				}
+			}
+		},
+		"enabled": ["CONVENTIONAL"]
+	},
+	"services": {
+		"GITHUB": {
+			"options": {
+				"REPOSITORY_NAME": "RE_DimDoors",
+				"REPOSITORY_OWNER": "LizzieSpace"
+			},
+			"type": "GITHUB"
+		}
+	},
+	"releaseTypes": {
+		"items": {
+			"RELEASE": {
+				"assets": ["jar"],
+				"description": "Release {{version}}",
+				"gitPush": "true",
+				"gitTag": "true",
+				"gitTagForce": "true",
+				"gitTagNames": ["{{version}}", "latest"],
+				"matchBranches": "^main$",
+				"matchEnvironmentVariables": {
+					"CI": "^true$"
+				},
+				"matchWorkspaceStatus": "CLEAN",
+				"publish": "true"
+			},
+			"ALPHA": {
+				"assets": ["jar"],
+				"collapseVersions": true,
+				"collapsedVersionQualifier": "alpha",
+				"description": "Release {{version}}",
+				"gitPush": "true",
+				"gitTag": "true",
+				"filterTags": "^({{configuration.releasePrefix}})?([0-9]\\d*)\\.([0-9]\\d*)\\.([0-9]\\d*)(-(alpha)(\\.([0-9]\\d*))?)?$",
+				"gitTagNames": ["{{version}}"],
+				"matchBranches": "^feature/\\.+$",
+				"matchEnvironmentVariables": {
+					"CI": "^true$"
+				},
+				"matchWorkspaceStatus": "CLEAN",
+				"publish": "true",
+				"publishPreRelease": "true",
+				"identifiers": [
+					{
+						"position": "PRE_RELEASE",
+						"qualifier": "{{#cutRight length=8}}{{branch}}{{/cutRight}}"
+					}
+				]
+			},
+			"BETA": {
+				"assets": ["jar"],
+				"collapseVersions": true,
+				"collapsedVersionQualifier": "beta",
+				"description": "Release {{version}}",
+				"gitPush": "true",
+				"gitTag": "true",
+				"gitTagNames": ["{{version}}"],
+				"filterTags": "^({{configuration.releasePrefix}})?([0-9]\\d*)\\.([0-9]\\d*)\\.([0-9]\\d*)(-(beta)(\\.([0-9]\\d*))?)?$",
+				"identifiers": [],
+				"matchEnvironmentVariables": {
+					"CI": "^true$"
+				},
+				"matchBranches": "^dev$",
+				"matchWorkspaceStatus": "CLEAN",
+				"publish": "true",
+				"publishPreRelease": "true"
+			},
+			"RELEASE_CANDIDATE": {
+				"assets": ["jar"],
+				"collapseVersions": true,
+				"collapsedVersionQualifier": "rc",
+				"description": "Release {{version}}",
+				"gitPush": "true",
+				"gitTag": "true",
+				"gitTagNames": ["{{version}}"],
+				"filterTags": "^({{configuration.releasePrefix}})?([0-9]\\d*)\\.([0-9]\\d*)\\.([0-9]\\d*)(-(rc)(\\.([0-9]\\d*))?)?$",
+				"identifiers": [],
+				"matchBranches": "^release/.+$",
+				"matchEnvironmentVariables": {
+					"CI": "^true$"
+				},
+				"matchWorkspaceStatus": "CLEAN",
+				"publish": "true",
+				"publishPreRelease": "true",
+				"versionRangeFromBranchName": true
+			},
+			"INTERNAL": {
+				"collapseVersions": true,
+				"collapsedVersionQualifier": "{{branch}}",
+				"matchBranches": "^.*",
+				"identifiers": [
+					{
+						"position": "BUILD",
+						"qualifier": "T",
+						"value": "{{#timestampYYYYMMDDHHMMSS}}{{timestamp}}{{/timestampYYYYMMDDHHMMSS}}"
+					}
+				]
+			}
+		},
+		"publicationServices": ["GITHUB"],
+		"remoteRepositories": ["origin"],
+		"enabled": [
+			"INTERNAL",
+			"ALPHA",
+			"BETA",
+			"RELEASE_CANDIDATE",
+			"RELEASE"
+		]
+	},
+	"releaseAssets": {
+		"jar": {
+			"description": "",
+			"type": "application/java-archive"
+		}
+	},
+	"git": {
+		"remotes": {
+			"origin": {
+				"authenticationMethod": "USER_PASSWORD"
+			}
+		}
+	},
+	"scheme": "SEMVER",
+	"dryRun": false,
+	"summary": true,
+	"releasePrefix": "v",
+	"initialVersion": "0.1.0",
+	"releaseLenient": false,
+	"summaryFile": ".nyx-summary",
+	"verbosity": "INFO",
+	"substitutions": {
+		"enabled": [],
+		"items": {}
+	}
+}

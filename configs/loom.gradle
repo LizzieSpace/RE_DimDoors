@@ -1,0 +1,21 @@
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        "re_dimdoors" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+
+    runs {
+        configureEach {
+            vmArg "-XX:+AllowEnhancedClassRedefinition"
+            vmArg "-XX:+IgnoreUnrecognizedVMOptions"
+        }
+
+        server {
+            runDir "run/server"
+        }
+    }
+}
