@@ -97,15 +97,29 @@
 				"publishPreRelease": "true",
 				"versionRangeFromBranchName": true
 			},
+			"INTERNAL-DIRTY": {
+				"collapseVersions": true,
+				"collapsedVersionQualifier": "{{branch}}",
+				"matchBranches": "^.*",
+				"matchWorkspaceStatus": "DIRTY",
+				"identifiers": [
+					{
+						"position": "BUILD",
+						"qualifier": "t",
+						"value": "{{#cutLeft length=\"7\"}}{{timestamp}}{{/cutLeft}}"
+					}
+				]
+			},
 			"INTERNAL": {
 				"collapseVersions": true,
 				"collapsedVersionQualifier": "{{branch}}",
 				"matchBranches": "^.*",
+				"matchWorkspaceStatus": "CLEAN",
 				"identifiers": [
 					{
 						"position": "BUILD",
-						"qualifier": "T",
-						"value": "{{#timestampYYYYMMDDHHMMSS}}{{timestamp}}{{/timestampYYYYMMDDHHMMSS}}"
+						"qualifier": "sha",
+						"value": "{{#short7}}{{releaseScope.finalCommit.sha}}{{/short7}}"
 					}
 				]
 			}
@@ -113,11 +127,12 @@
 		"publicationServices": ["GITHUB"],
 		"remoteRepositories": ["origin"],
 		"enabled": [
-			"INTERNAL",
 			"ALPHA",
 			"BETA",
 			"RELEASE_CANDIDATE",
-			"RELEASE"
+			"RELEASE",
+			"INTERNAL",
+			"INTERNAL-DIRTY"
 		]
 	},
 	"releaseAssets": {
