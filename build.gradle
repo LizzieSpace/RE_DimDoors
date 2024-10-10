@@ -1,118 +1,48 @@
+buildscript {
+    repositories { maven { url("https://plugins.gradle.org/m2/") } }
+    dependencies { classpath 'com.mooltiverse.oss.nyx:main:3.0.7' }
+}
+
 plugins {
     id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'maven-publish'
 }
 
-version = project.version
+import com.mooltiverse.oss.nyx.Nyx;
+
+final Nyx nyx = new Nyx()
+
+nyx.configuration().getGit().getRemotes().get("origin").setPassword(System.getenv("CI") != null ? System.getenv('GITHUB_TOKEN') : new File('secrets').text)
+nyx.configuration().getGit().getRemotes().get("origin").setUser(System.getenv("CI") != null ? System.getenv('GITHUB_TOKEN') : new File('secrets').text)
+
+nyx.configuration().getServices().get("GITHUB").getOptions().put("AUTHENTICATION_TOKEN", System.getenv("CI") != null ? System.getenv('GITHUB_TOKEN') : new File('secrets').text)
+
+nyx.configuration().getReleaseAssets().get("jar").setPath("build/libs/${archive_name}-{{version}}.jar")
+nyx.configuration().getReleaseAssets().get("jar").setFileName("${archive_name}-{{version}}.jar")
+
+nyx.infer()
+
+tasks.register('nyxFinalize') {
+    doLast {
+        project.logger.lifecycle("branch: {}\nversion: {}", nyx.state().getBranch(), nyx.state().getVersion())
+        nyx.make();
+        nyx.mark();
+        nyx.publish();
+    }
+}
+
+build.finalizedBy(nyxFinalize)
+
+
+version = nyx.state().getVersion()
 group = project.maven_group
 
 base {
     archivesName = project.archive_name
 }
 
-loom {
-    splitEnvironmentSourceSets()
-
-    mods {
-        "re_dimdoors" {
-            sourceSet sourceSets.main
-            sourceSet sourceSets.client
-        }
-    }
-
-    runs {
-        configureEach {
-            vmArg "-XX:+AllowEnhancedClassRedefinition"
-            vmArg "-XX:+IgnoreUnrecognizedVMOptions"
-        }
-
-        server {
-            runDir "run/server"
-        }
-    }
-}
-
-repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
-    exclusiveContent {
-        forRepository {
-            maven {
-                name = "Modrinth"
-                url = "https://api.modrinth.com/maven"
-            }
-        }
-        filter {
-            includeGroup "maven.modrinth"
-        }
-    }
-    maven {
-        name = 'ParchmentMC'
-        url = 'https://maven.parchmentmc.org'
-    }
-    maven {
-        // location of the maven that hosts JEI files since January 2023
-        name = "Jared's maven"
-        url = "https://maven.blamejared.com/"
-    }
-    maven { url = "https://cursemaven.com" } content { includeGroup "curse.maven" }
-    maven { url = "https://maven.shedaniel.me/" } // Cloth Config
-    maven { url = "https://maven.architectury.dev/" } // Architectury API
-    maven { url = "https://jitpack.io" } // poly2tri
-    maven { url = "https://api.modrinth.com/maven" } // LazyDFU
-    maven { url = "https://maven.terraformersmc.com/" } // Mod Menu, EMI
-}
-
-configurations.configureEach {
-    resolutionStrategy {
-        force("net.fabricmc:fabric-loader:${loader_version}")
-    }
-}
-
-def devEnv(DependencyHandler deps) {
-    deps.modLocalRuntime "maven.modrinth:lazydfu:${lazy_dfu_version}"
-    deps.modLocalRuntime "dev.emi:emi-fabric:${emi_version}+${minecraft_version}"
-    deps.modLocalRuntime "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
-}
-
-def setup(DependencyHandler deps) {
-    deps.minecraft "com.mojang:minecraft:${minecraft_version}"
-    deps.mappings loom.layered() {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.20.1:2023.09.03@zip")
-    }
-    deps.modImplementation "net.fabricmc:fabric-loader:${loader_version}"
-}
-
-def required(DependencyHandler deps) {
-    deps.modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}+${minecraft_version}"
-    deps.modImplementation "maven.modrinth:dimensionaldoors:${dimdoors_version}-fabric"
-//=-=-=-=-=-=-=-=-=-=-=-=-= DIM DOORS DEPENDENCIES =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    deps.modApi "dev.architectury:architectury-fabric:${architectury_version}"
-
-    deps.modApi "com.flowpowered:flow-math:1.0.3"
-    deps.modApi "org.jgrapht:jgrapht-core:1.1.0"
-    deps.modApi "com.github.DimensionalDevelopment:poly2tri.java:0.1.1"
-
-    deps.modApi "curse.maven:cardinal-components-base-${cardinal_components}:${cardinal_components_base}"
-    deps.modApi "curse.maven:cardinal-components-item-${cardinal_components}:${cardinal_components_item}"
-    deps.modApi "curse.maven:cardinal-components-world-${cardinal_components}:${cardinal_components_world}"
-    deps.modApi "curse.maven:cardinal-components-chunk-${cardinal_components}:${cardinal_components_chunk}"
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-    deps.modApi "me.shedaniel.cloth:cloth-config-fabric:${cloth_config}"
-    deps.modApi "com.terraformersmc:modmenu:${modmenu_version}"
-
-}
-
-dependencies {
-    setup(dependencies)
-    devEnv(dependencies)
-    required(dependencies)
-}
+apply from: "configs/loom.gradle"
+apply from: "configs/dependencies.gradle"
 
 processResources {
     inputs.property "version", version
@@ -131,7 +61,7 @@ processResources {
     }
 }
 
-def targetJavaVersion = 17
+final def targetJavaVersion = 17
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
@@ -140,10 +70,12 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+//    final def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+//    if (JavaVersion.current() < javaVersion) {
+//        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+//    }
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
     // if it is present.
     // If you remove this line, sources will not be generated.
@@ -151,8 +83,10 @@ java {
 }
 
 jar {
-    from("LICENSE") {
-        rename { "${it}_${archive_name}" }
+    reproducibleFileOrder = true
+
+    from("LICENSE.md") {
+        rename(/(LICENSE)(\.md)/, /$1_${archive_name}$2/)
     }
 }
 
