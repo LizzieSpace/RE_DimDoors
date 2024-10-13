@@ -37,6 +37,7 @@ jobs:
       previous_version: ${{steps.build_vars.outputs.previous_version}}
       new_release: ${{steps.build_vars.outputs.new_release}}
       new_version: ${{steps.build_vars.outputs.new_version}}
+      dirty_status: ${{steps.workplace_status.outputs.DIRTY}}
 
     steps:
       - name: Checkout sources
@@ -57,6 +58,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{github.token}}
         run: |
+          git config core.fileMode false
           chmod +x gradlew
           ./gradlew build
 
@@ -99,8 +101,21 @@ jobs:
           if-no-files-found: 'error'
           overwrite: 'true'
 
+      - name: check workplace status
+        id: workplace_status
+        run: echo DIRTY=$(git status --porcelain) >> $GITHUB_OUTPUT # echnically true when not null
+
+      - name: Workplace is dirty
+        if: steps.workplace_status.outputs.DIRTY
+        run: |
+          echo "
+          Files were found after the build process:
+          \`\`\`diff
+          $(git diff --compact-summary -p)
+          \`\`\`" >> $GITHUB_STEP_SUMMARY
+
   release:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && !needs.build.outputs.fabric_version
     name: Update Tags
     runs-on: ubuntu-latest
     permissions:

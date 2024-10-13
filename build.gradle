@@ -16,10 +16,10 @@ base {
     archivesName = project.archive_name
 }
 
-
 apply from: "configs/versioning.gradle"
 apply from: "configs/loom.gradle"
 apply from: "configs/dependencies.gradle"
+
 processResources {
     inputs.property "version", version
     inputs.property "minecraft_version", minecraft_version
