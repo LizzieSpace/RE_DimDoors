@@ -1,49 +1,25 @@
 buildscript {
+    // this block isn't strictly necessary for the build to run, but intelij IDEA only recognizes the nyx code completion on configs/versioning.gradle if it is present. thanks, Intelij
     repositories { maven { url("https://plugins.gradle.org/m2/") } }
-    dependencies { classpath 'com.mooltiverse.oss.nyx:main:3.0.7' }
+    dependencies {
+        classpath 'com.mooltiverse.oss.nyx:main:3.0.7'
+    }
 }
-
 plugins {
     id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'maven-publish'
 }
 
-import com.mooltiverse.oss.nyx.Nyx
-
-final Nyx nyx = new Nyx()
-
-nyx.configuration().getGit().getRemotes().get("origin").setPassword(System.getenv("CI") != null ? System.getenv('GITHUB_TOKEN') : new File('secrets').text)
-nyx.configuration().getGit().getRemotes().get("origin").setUser(System.getenv("CI") != null ? System.getenv('GITHUB_TOKEN') : new File('secrets').text)
-
-nyx.configuration().getServices().get("GITHUB").getOptions().put("AUTHENTICATION_TOKEN", System.getenv("CI") != null ? System.getenv('GITHUB_TOKEN') : new File('secrets').text)
-
-nyx.configuration().getReleaseAssets().get("jar").setPath("build/libs/${archive_name}-{{version}}.jar")
-nyx.configuration().getReleaseAssets().get("jar").setFileName("${archive_name}-{{version}}.jar")
-
-nyx.infer()
-
-tasks.register('nyxFinalize') {
-    doLast {
-        project.logger.lifecycle("branch: {}\nversion: {}\nNew release: {}", nyx.state().getBranch(), nyx.state().getVersion(), nyx.state().getNewRelease())
-        nyx.make()
-        nyx.mark()
-        nyx.publish()
-    }
-}
-
-build.finalizedBy(nyxFinalize)
-
-
-version = nyx.state().getVersion()
 group = project.maven_group
 
 base {
     archivesName = project.archive_name
 }
 
+
+apply from: "configs/versioning.gradle"
 apply from: "configs/loom.gradle"
 apply from: "configs/dependencies.gradle"
-
 processResources {
     inputs.property "version", version
     inputs.property "minecraft_version", minecraft_version

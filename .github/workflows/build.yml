@@ -11,8 +11,6 @@ on:
       - dev
       - release/**
       - feature/**
-    tags_ignore:
-      - v0.*
 
   pull_request:
     paths:
@@ -131,12 +129,16 @@ jobs:
           name: ${{needs.build.outputs.archive_name}}-${{needs.build.outputs.current_version}}
 
       - name: Release new Tag
-        if: needs.build.outputs.new_release == 'true' && needs.build.outputs.new_version == 'true'
-        uses: softprops/action-gh-release@v2.0.8
+        if: needs.build.outputs.new_release == 'true'
+        uses: ncipollo/release-action@v1.14.0
         with:
+          artifactErrorsFailBuild: true
+          generateReleaseNotes: true
           prerelease: ${{github.ref_name != 'main'}}
-          make_latest: ${{github.ref_name == 'main'}}
-          tag_name: ${{needs.build.outputs.current_version}}
+          makeLatest: false
+          artifactContentType: 'application/java-archive'
+          artifacts: ${{needs.build.outputs.archive_name}}-${{needs.build.outputs.current_version}}.jar
+          tag: ${{needs.build.outputs.current_version}}
           body: |
             Release ${{needs.build.outputs.current_version}}
 
@@ -144,24 +146,22 @@ jobs:
             
             ---
 
-          generate_release_notes: true
-          fail_on_unmatched_files: true
-          files: ${{needs.build.outputs.archive_name}}-${{needs.build.outputs.current_version}}.jar
-
       - name: Update "latest" tag
-        if: needs.build.outputs.new_release == 'true' && needs.build.outputs.new_version == 'true' && github.ref_name == 'main'
-        uses: IsaacShelton/update-existing-release@v1.3.4
+        if: needs.build.outputs.new_release == 'true' && github.ref_name == 'main'
+        uses: ncipollo/release-action@v1.14.0
         with:
-          token: ${{github.token}}
-          message: Release ${{needs.build.outputs.current_version}}
+          tag: "latest"
+          name: "Latest"
+          generateReleaseNotes: true
+          allowUpdates: true
+          makeLatest: true
+          removeArtifacts: true
+          artifactContentType: 'application/java-archive'
+          artifacts: ${{needs.build.outputs.archive_name}}-${{needs.build.outputs.current_version}}.jar
           body: |
             Release ${{needs.build.outputs.current_version}}
             
             ${{steps.changelog.outputs.changes}}
-          release: "Latest"
-          tag: "latest"
-          replace: true
-          files: ${{needs.build.outputs.archive_name}}-${{needs.build.outputs.current_version}}.jar
 
   removal:
     name: remove older releases
