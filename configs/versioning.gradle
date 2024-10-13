@@ -1,0 +1,76 @@
+buildscript {
+    repositories { maven { url("https://plugins.gradle.org/m2/") } }
+    dependencies {
+        classpath 'com.mooltiverse.oss.nyx:main:3.0.7'
+    }
+}
+// This block actually does the nyx versioning for the build
+
+
+import com.mooltiverse.oss.nyx.Nyx
+
+import java.time.LocalDate
+import java.time.temporal.WeekFields
+
+final Nyx nyx = new Nyx()
+
+nyx.configuration().getGit().getRemotes().get("origin").setPassword(System.getenv("CI") != null ? System.getenv('GITHUB_TOKEN') : new File('secrets').text)
+nyx.configuration().getGit().getRemotes().get("origin").setUser(System.getenv("CI") != null ? System.getenv('GITHUB_TOKEN') : new File('secrets').text)
+
+nyx.configuration().getServices().get("GITHUB").getOptions().put("AUTHENTICATION_TOKEN", System.getenv("CI") != null ? System.getenv('GITHUB_TOKEN') : new File('secrets').text)
+
+nyx.configuration().getReleaseAssets().get("jar").setPath("build/libs/${archive_name}-{{version}}.jar")
+nyx.configuration().getReleaseAssets().get("jar").setFileName("${archive_name}-{{version}}.jar")
+
+nyx.infer()
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+class McSnapshot {
+// neat code to generate the same versioning model as minecraft snapshots. gotta work on actually detecting tags like nyx does tho...
+    static final LocalDate date = LocalDate.now()
+
+    static int week = date.get(WeekFields.ISO.weekOfYear())
+    static int year = date.getYear() % 100
+    static char s
+    static version
+
+    static inferVersion(final String ref) {
+        s = ref.matches(/${year}w${week}[a-z]$/) ? ref.charAt(ref.length() - 1) : "a".charAt(0)
+        (version = "${year}w${week}${s}")
+    }
+
+    McSnapshot() {
+        inferVersion("${year}w${week}${s}")
+    }
+
+    static String getVersion() {
+        return version
+    }
+
+    static next() {
+        s = ((s - 18) % 26 + 97) as char
+        version = "${year}w${week}${s}"
+        return this
+    }
+}
+
+//noinspection GroovyUnusedAssignment
+final McSnapshot mcSnapshot = new McSnapshot()
+
+tasks.register('nyxFinalize') {
+    doLast {
+        project.logger.lifecycle "branch: {}", nyx.state().getBranch()
+        project.logger.lifecycle "version: {}", nyx.state().getVersion()
+        project.logger.lifecycle "New release: {}", nyx.state().getNewRelease()
+        nyx.make()
+        nyx.mark()
+        nyx.publish()
+
+//        project.logger.lifecycle mcSnapshot.getVersion()
+//        project.logger.lifecycle mcSnapshot.next().getVersion()
+//        project.logger.lifecycle mcSnapshot.next().getVersion()
+    }
+}
+
+build.finalizedBy(nyxFinalize)
+version = nyx.state().getVersion()
